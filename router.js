@@ -1,5 +1,6 @@
 const express=require("express")
 const { userRegisterController, userLoginController } = require("./controller/userController")
+const { addProductscontroller } = require("./controller/productController")
 
 const router=express.Router()
 
@@ -7,6 +8,17 @@ const router=express.Router()
 router.post("/register",userRegisterController)
 //login
 router.post("/login",userLoginController) 
+
+
+
+
+
+
+
+//Admin
+
+//add Products
+router.post("/add-products",addProductscontroller)
 
 
 
