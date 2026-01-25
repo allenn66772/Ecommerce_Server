@@ -9,6 +9,10 @@ const productSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+    uploadImages: {
+    type: Array,
+    required: true,
+  },
     productDesc:{
         type:String,
         required:true

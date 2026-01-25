@@ -1,6 +1,7 @@
 const express=require("express")
 const { userRegisterController, userLoginController } = require("./controller/userController")
 const { addProductscontroller } = require("./controller/productController")
+const multerConfig = require("./Middleware/imageMulterMiddleware")
 
 const router=express.Router()
 
@@ -18,7 +19,7 @@ router.post("/login",userLoginController)
 //Admin
 
 //add Products
-router.post("/add-products",addProductscontroller)
+router.post("/add-products",multerConfig.array("uploadImages",3),addProductscontroller)
 
 
 
