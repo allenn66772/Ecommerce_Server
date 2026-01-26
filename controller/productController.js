@@ -5,16 +5,16 @@ const products = require("../model/productModel");
 exports.addProductscontroller = async (req, res) => {
   console.log("Inside Add Product controller");
 
-  const {pname,description,productDesc,price,dprice,discount,highlights}=req.body;
+  const {pname,description,productDesc,price,dprice,category,discount,highlights}=req.body;
 
-  console.log(pname,description,productDesc,price,dprice,discount,highlights);
+  console.log(pname,description,productDesc,price,dprice,category,discount,highlights);
 
   var uploadImages=[];
   req.files.map((item)=>uploadImages.push(item.filename))
 
   try {
     const newProduct = new products({
-      pname,description,uploadImages,productDesc,price,dprice,discount,highlights});
+      pname,description,uploadImages,productDesc,price,category,dprice,discount,highlights});
 
     await newProduct.save();
     res.status(200).json(newProduct);
@@ -56,5 +56,22 @@ const searchKey = req.query.search || "";
   } catch (error) {
     res.status(500).json(error)
   }
+  
+}
+//get a product controller
+exports.getAProductController=async(req,res)=>{
+  console.log("Inside Get a products controller");
+
+  const {id}=req.params
+  console.log(id);
+
+  try{
+    const result=await products.findById(id)
+    res.status(200).json(result)
+
+  }catch(error){
+    res.status(500).json(error)
+  }
+  
   
 }
