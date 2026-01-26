@@ -19,6 +19,8 @@ estoreServer.use(router)
 
 const PORT=5000
 
+estoreServer.use("/imgUploads",express.static("./imgUploads"))
+
 estoreServer.listen(PORT,()=>{
     console.log(`E-Store server started running at PORt ${PORT}`);
     

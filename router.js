@@ -1,7 +1,8 @@
 const express=require("express")
 const { userRegisterController, userLoginController } = require("./controller/userController")
-const { addProductscontroller } = require("./controller/productController")
+const { addProductscontroller, getHomeProductController, getAllProductsController } = require("./controller/productController")
 const multerConfig = require("./Middleware/imageMulterMiddleware")
+const jwtMiddleware = require("./Middleware/jwtMiddleware")
 
 const router=express.Router()
 
@@ -11,8 +12,11 @@ router.post("/register",userRegisterController)
 router.post("/login",userLoginController) 
 
 
-
-
+//user
+//home products
+router.get("/home-products",jwtMiddleware,getHomeProductController)
+//get all Products
+router.get("/all-products",jwtMiddleware,getAllProductsController)
 
 
 
