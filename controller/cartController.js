@@ -59,8 +59,46 @@ exports.getFromCartController=async(req,res)=>{
     const userMail=req.payload
 
      const cart=await carts.findOne({userMail}).populate("items.productId")
+
+     if (!cart) {
+      return res.status(200).json([]); // no cart yet
+    }
+
      res.status(200).json(cart.items) 
   } catch (error) {
     res.status(500).json(error)
   }
+}
+
+// update product quantity 
+exports.updateProductQuantity=async(req,res)=>{
+  console.log("Inside Update Product Quantity");
+
+  try {
+    const userMail=req.payload
+    const {productId,quantity}=req.body
+
+    if(quantity < 1){
+      return res.status(400).json("Quantity must not less than 1")
+    }
+    const cart=await carts.findOne({userMail})
+    if(!cart){
+       return res.status(404).json("Cart not found")
+    }
+    const itemIndex=cart.items.findIndex(
+      (item)=>item.productId.toString() ===productId
+    )
+    if(itemIndex === -1){
+      return res.status(401).json("Product not in cart")
+    }
+    cart.items[itemIndex].quantity=quantity
+    await cart.save()
+
+    res.status(200).json(cart.items)
+    
+  } catch (error) {
+    res.status(500).json(error)
+    
+  }
+  
 }
