@@ -51,3 +51,16 @@ exports.addToCartController = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
+///get from cart
+exports.getFromCartController=async(req,res)=>{
+  console.log("Inside Get From Cart Controller");
+  try {
+    const userMail=req.payload
+
+     const cart=await carts.findOne({userMail}).populate("items.productId")
+     res.status(200).json(cart.items) 
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
