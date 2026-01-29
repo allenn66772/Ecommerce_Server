@@ -3,7 +3,7 @@ const { userRegisterController, userLoginController } = require("./controller/us
 const { addProductscontroller, getHomeProductController, getAllProductsController, getAProductController } = require("./controller/productController")
 const multerConfig = require("./Middleware/imageMulterMiddleware")
 const jwtMiddleware = require("./Middleware/jwtMiddleware")
-const { addToCartController, getFromCartController, updateProductQuantity } = require("./controller/cartController")
+const { addToCartController, getFromCartController, updateProductQuantity, removeFromCart } = require("./controller/cartController")
 
 const router=express.Router()
 
@@ -26,7 +26,8 @@ router.post("/add-to-cart",jwtMiddleware,addToCartController)
 router.get("/get-from-cart",jwtMiddleware,getFromCartController)
 //update quantity
 router.put("/update-product-quantity",jwtMiddleware,updateProductQuantity)
-
+//remove from cart
+router.delete("/remove/:productId",jwtMiddleware,removeFromCart)
 
 //Admin
 

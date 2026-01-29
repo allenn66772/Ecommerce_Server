@@ -71,34 +71,70 @@ exports.getFromCartController=async(req,res)=>{
 }
 
 // update product quantity 
-exports.updateProductQuantity=async(req,res)=>{
+exports.updateProductQuantity = async (req, res) => {
   console.log("Inside Update Product Quantity");
 
   try {
+    const userMail = req.payload;
+    const { productId, quantity } = req.body;
+
+    if (quantity < 1) {
+      return res.status(400).json("Quantity must not be less than 1");
+    }
+
+    const cart = await carts.findOne({ userMail });
+    if (!cart) {
+      return res.status(404).json("Cart not found");
+    }
+
+    const itemIndex = cart.items.findIndex(
+      (item) =>
+        item.productId._id
+          ? item.productId._id.toString() === productId
+          : item.productId.toString() === productId
+    );
+
+    if (itemIndex === -1) {
+      return res.status(404).json("Product not in cart");
+    }
+
+    cart.items[itemIndex].quantity = quantity;
+    await cart.save();
+
+    res.status(200).json(cart.items);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error.message);
+  }
+};
+//remove item from cart
+
+exports.removeFromCart=async(req,res)=>{
+  console.log("Inside Remove From Cart");
+
+  try { 
     const userMail=req.payload
-    const {productId,quantity}=req.body
+    const {productId}=req.params
 
-    if(quantity < 1){
-      return res.status(400).json("Quantity must not less than 1")
-    }
-    const cart=await carts.findOne({userMail})
+    //find cart and remove item
+    const cart=await carts.findOneAndUpdate(
+      {userMail},
+      {
+        $pull:{
+          items:{productId},
+        },
+      },
+      {new:true}
+    ).populate("items.productId")
+
     if(!cart){
-       return res.status(404).json("Cart not found")
+      return res.status(404).json("Cart not found")
     }
-    const itemIndex=cart.items.findIndex(
-      (item)=>item.productId.toString() ===productId
-    )
-    if(itemIndex === -1){
-      return res.status(401).json("Product not in cart")
-    }
-    cart.items[itemIndex].quantity=quantity
-    await cart.save()
-
     res.status(200).json(cart.items)
     
   } catch (error) {
     res.status(500).json(error)
-    
   }
   
+
 }
