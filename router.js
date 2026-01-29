@@ -4,6 +4,7 @@ const { addProductscontroller, getHomeProductController, getAllProductsControlle
 const multerConfig = require("./Middleware/imageMulterMiddleware")
 const jwtMiddleware = require("./Middleware/jwtMiddleware")
 const { addToCartController, getFromCartController, updateProductQuantity, removeFromCart } = require("./controller/cartController")
+const { addToWishlistController, removeFromWishlit, getWishlistController } = require("./controller/wishlistController")
 
 const router=express.Router()
 
@@ -28,6 +29,12 @@ router.get("/get-from-cart",jwtMiddleware,getFromCartController)
 router.put("/update-product-quantity",jwtMiddleware,updateProductQuantity)
 //remove from cart
 router.delete("/remove/:productId",jwtMiddleware,removeFromCart)
+//add to wishlist
+router.post("/add-wishlist",jwtMiddleware,addToWishlistController)
+//remove from wishlist
+router.delete("/remove-wishlist/:productId",jwtMiddleware,removeFromWishlit)
+//get from wishlist
+router.get("/wishlist", jwtMiddleware, getWishlistController);
 
 //Admin
 
